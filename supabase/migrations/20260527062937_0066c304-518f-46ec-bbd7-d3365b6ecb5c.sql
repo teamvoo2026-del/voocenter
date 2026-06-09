@@ -1,0 +1,1 @@
+ALTER TABLE public.course_schedules ADD COLUMN instructor_id UUID NOT NULL;
