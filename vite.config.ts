@@ -5,6 +5,7 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { join } from "path";
 
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
 export default defineConfig({
@@ -13,5 +14,10 @@ export default defineConfig({
   },
   nitro: {
     preset: "vercel",
+    output: {
+      dir: join(process.cwd(), ".vercel/output"),
+      serverDir: join(process.cwd(), ".vercel/output/functions/index.func"),
+      publicDir: join(process.cwd(), ".vercel/output/static"),
+    },
   },
 });
