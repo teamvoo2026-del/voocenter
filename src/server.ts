@@ -9,7 +9,17 @@ type ServerEntry = {
 
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
+function checkEnv() {
+  const missing = [];
+  if (!process.env.VITE_SUPABASE_URL) missing.push("VITE_SUPABASE_URL");
+  if (!process.env.VITE_SUPABASE_PUBLISHABLE_KEY) missing.push("VITE_SUPABASE_PUBLISHABLE_KEY");
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables: ${missing.join(", ")}. Please add them in the Vercel project settings.`);
+  }
+}
+
 async function getServerEntry(): Promise<ServerEntry> {
+  checkEnv();
   if (!serverEntryPromise) {
     serverEntryPromise = import("@tanstack/react-start/server-entry").then(
       (m) => ((m as { default?: ServerEntry }).default ?? (m as unknown as ServerEntry)),

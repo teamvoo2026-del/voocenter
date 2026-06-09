@@ -1,6 +1,19 @@
-export function renderErrorPage(error?: Error | string): string {
-  const message = error instanceof Error ? error.message : (error || "");
-  const stack = error instanceof Error ? error.stack : "";
+export function renderErrorPage(error?: any): string {
+  let message = "";
+  let stack = "";
+
+  if (error instanceof Error) {
+    message = error.message;
+    stack = error.stack || "";
+  } else if (typeof error === "string") {
+    message = error;
+  } else if (error) {
+    try {
+      message = JSON.stringify(error, null, 2);
+    } catch {
+      message = String(error);
+    }
+  }
   
   return `<!doctype html>
 <html lang="en">
